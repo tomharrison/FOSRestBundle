@@ -13,8 +13,6 @@ namespace FOS\RestBundle\Decoder;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 
-use FOS\Rest\Decoder\DecoderProviderInterface;
-
 /**
  * Provides encoders through the Symfony2 DIC
  *

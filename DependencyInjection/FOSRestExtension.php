@@ -16,12 +16,9 @@ use Symfony\Component\Config\FileLocator,
     Symfony\Component\DependencyInjection\Reference,
     Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
-    Symfony\Component\HttpKernel\Kernel;
+    Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-use FOS\Rest\Util\Codes;
-
-use FOS\RestBundle\FOSRestBundle;
+use FOS\RestBundle\Response\Codes;
 
 class FOSRestExtension extends Extension
 {
@@ -40,10 +37,6 @@ class FOSRestExtension extends Extension
         $loader->load('routing.xml');
         $loader->load('util.xml');
 
-        if (version_compare(FOSRestBundle::getSymfonyVersion(Kernel::VERSION), '2.1.0', '<')) {
-            $container->setParameter('fos_rest.routing.loader.controller.class', $container->getParameter('fos_rest.routing.loader_2_0.controller.class'));
-        }
-
         $formats = array();
         foreach ($config['view']['formats'] as $format => $enabled) {
             if ($enabled) {
@@ -59,8 +52,6 @@ class FOSRestExtension extends Extension
         foreach ($config['service'] as $key => $service) {
             $container->setAlias($this->getAlias().'.'.$key, $config['service'][$key]);
         }
-        $container->setParameter($this->getAlias().'.objects_version', $config['objects_version']);
-
         $container->setParameter($this->getAlias().'.formats', $formats);
         $container->setParameter($this->getAlias().'.default_engine', $config['view']['default_engine']);
 
@@ -72,7 +63,7 @@ class FOSRestExtension extends Extension
         $container->setParameter($this->getAlias().'.force_redirects', $config['view']['force_redirects']);
 
         if (!is_numeric($config['view']['failed_validation'])) {
-            $config['view']['failed_validation'] = constant('\FOS\Rest\Util\Codes::'.$config['view']['failed_validation']);
+            $config['view']['failed_validation'] = constant('\FOS\RestBundle\Response\Codes::'.$config['view']['failed_validation']);
         }
         $container->setParameter($this->getAlias().'.failed_validation', $config['view']['failed_validation']);
 
@@ -85,14 +76,14 @@ class FOSRestExtension extends Extension
 
         foreach ($config['exception']['codes'] as $exception => $code) {
             if (!is_numeric($code)) {
-                $config['exception']['codes'][$exception] = constant("\FOS\Rest\Util\Codes::$code");
+                $config['exception']['codes'][$exception] = constant("\FOS\RestBundle\Response\Codes::$code");
             }
             $this->testExceptionExists($exception);
         }
         foreach ($config['exception']['messages'] as $exception => $message) {
             $this->testExceptionExists($exception);
         }
-
+        
         $container->setParameter($this->getAlias().'.exception.codes', $config['exception']['codes']);
         $container->setParameter($this->getAlias().'.exception.messages', $config['exception']['messages']);
 
@@ -125,7 +116,7 @@ class FOSRestExtension extends Extension
 
     /**
      * Check if an exception is loadable.
-     *
+     * 
      * @param string $exception class to test
      * @throws InvalidArgumentException if the class was not found.
      */

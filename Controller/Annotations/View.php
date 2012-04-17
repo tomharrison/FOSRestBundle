@@ -25,11 +25,6 @@ class View extends Template
     protected $templateVar;
 
     /**
-     * @var int
-     */
-    protected $statusCode;
-
-    /**
      * Returns the annotation alias name.
      *
      * @return string
@@ -58,21 +53,5 @@ class View extends Template
     public function getTemplateVar()
     {
         return $this->templateVar;
-    }
-
-    /**
-     * @param int $statusCode
-     */
-    public function setStatusCode($statusCode)
-    {
-        $this->statusCode = $statusCode;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatusCode()
-    {
-        return $this->statusCode;
     }
 }

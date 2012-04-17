@@ -15,7 +15,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition,
     Symfony\Component\Config\Definition\ConfigurationInterface;
 
-use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Response\Codes;
 
 /**
  * This class contains the configuration information for the bundle
@@ -54,7 +54,6 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('view_handler')->defaultValue('fos_rest.view_handler.default')->end()
                     ->end()
                 ->end()
-                ->scalarNode('objects_version')->defaultNull()->end()
             ->end()
         ->end();
 

@@ -12,40 +12,30 @@ In this case, you must first specify resource relations in special rest YML or X
 # src/Acme/HelloBundle/Resources/config/users_routes.yml
 users:
     type:     rest
-    resource: Acme\HelloBundle\Controller\UsersController
+    resource: "@AcmeHelloBundle\Controller\UsersController"
 
 comments:
     type:     rest
     parent:   users
-    resource: Acme\HelloBundle\Controller\CommentsController
+    resource: "@AcmeHelloBundle\Controller\CommentsController"
 ```
 
 ```xml
-<!-- src/Acme/HelloBundle/Resources/config/users_routes.xml -->
+# src/Acme/HelloBundle/Resources/config/users_routes.xml
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <routes xmlns="http://friendsofsymfony.github.com/schema/rest"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://friendsofsymfony.github.com/schema/rest https://raw.github.com/FriendsOfSymfony/FOSRestBundle/master/Resources/config/schema/routing/rest_routing-1.0.xsd">
 
-    <import id="users" type="rest" resource="Acme\HelloBundle\Controller\UsersController" />
-    <import type="rest" parent="users" resource="Acme\HelloBundle\Controller\CommentsController" />
+    <import type="rest" resource="@AcmeHelloBundle\Controller\UsersController" />
+    <import type="rest" parent="users" resource="@AcmeHelloBundle\Controller\CommentsController" />
 </routes>
 ```
 
 Notice ``parent: users`` option in the second case. This option specifies that the comments resource
-is child of the users resource.
-
-It is also necessary to add ``type: rest`` to the ``routing.yml`` file:
-
-```yaml
-# app/config/routing.yml
-acme_hello:
-    type: rest
-    resource: "@AcmeHelloBundle/Resources/config/users_routes.yml"
-```
-
-In this case, your ``UsersController`` MUST always have a single resource ``get...`` action:
+is child of the users resource. In this case, your ``UsersController`` MUST always have a single
+resource ``get...`` action:
 
 ```php
 <?php
@@ -70,7 +60,7 @@ auto-generation process and can be any name you like.
 class CommentsController extends Controller
 {
     public function voteCommentAction($slug, $id)
-    {} // "vote_user_comment"   [POST] /users/{slug}/comments/{id}/vote
+    {} // "vote_user_comment"   [PUT] /users/{slug}/comments/{id}/vote
 
     public function getCommentsAction($slug)
     {} // "get_user_comments"   [GET] /users/{slug}/comments
@@ -116,7 +106,7 @@ the ``type: rest`` param in your application level routes include.
 
 RestBundle uses REST paths to generate route name. This means, that URL:
 
-    [POST] /users/{slug}/comments/{id}/vote
+    [PUT] /users/{slug}/comments/{id}/vote
 
 will become the route with the name ``vote_user_comment``.
 

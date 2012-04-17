@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\Response;
 
-use FOS\Rest\Util\Codes,
+use FOS\RestBundle\Response\Codes,
     FOS\RestBundle\View\ViewHandler,
     FOS\RestBundle\View\View,
     FOS\RestBundle\Util\ExceptionWrapper;

@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse,
     Symfony\Component\Form\FormInterface,
     Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 
-use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Response\Codes;
 
 /**
  * View may be used in controllers to build up a response in a format agnostic way
@@ -133,7 +133,7 @@ class ViewHandler extends ContainerAware implements ViewHandlerInterface
      * If the given format uses the templating system for rendering
      *
      * @param string $format
-     *
+     * 
      * @return Boolean
      */
     public function isFormatTemplating($format)
@@ -154,35 +154,11 @@ class ViewHandler extends ContainerAware implements ViewHandlerInterface
     /**
      * Get the serializer service
      *
-     * @return JMS\SerializerBundle\Serializer\SerializerInterface
+     * @return Symfony\Component\Serializer\SerializerInterface
      */
-    public function getSerializer()
+    protected function getSerializer()
     {
         return $this->container->get('fos_rest.serializer');
-    }
-
-    /**
-     * Get the serializer objects version
-     *
-     * @param View $view
-     *
-     * @return string|null "Objects versioning" version
-     */
-    protected function getObjectsVersion(View $view)
-    {
-        return $view->getObjectsVersion() ?: $this->container->getParameter('fos_rest.objects_version');
-    }
-
-    /**
-     * Get the serializer objects groups
-     *
-     * @param View $view
-     *
-     * @return array|null "Objects groups" groups
-     */
-    protected function getObjectsGroups(View $view)
-    {
-        return $view->getObjectsGroups();
     }
 
     /**
@@ -331,18 +307,9 @@ class ViewHandler extends ContainerAware implements ViewHandlerInterface
             return $this->createRedirectResponse($view, $location, $format);
         }
 
-        if ($this->isFormatTemplating($format)) {
-            $content = $this->renderTemplate($view, $format);
-        } else {
-            $serializer = $this->getSerializer();
-            $serializer->setVersion($this->getObjectsVersion($view));
-
-            if ($this->getObjectsGroups($view)) {
-                $serializer->setGroups($this->getObjectsGroups($view));
-            }
-
-            $content = $serializer->serialize($view->getData(), $format);
-        }
+        $content = $this->isFormatTemplating($format)
+            ? $this->renderTemplate($view, $format)
+            : $this->getSerializer()->serialize($view->getData(), $format);
 
         return new Response($content, $this->getStatusCode($view), $view->getHeaders());
     }

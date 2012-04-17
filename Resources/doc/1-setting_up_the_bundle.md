@@ -18,13 +18,10 @@ method is the standard Symfony2 method.
 Add the following lines in your `deps` file:
 
 ```
-[FOSRest]
-    git=git://github.com/FriendsOfSymfony/FOSRest.git
-    target=fos/FOS/Rest
-
 [FOSRestBundle]
     git=git://github.com/FriendsOfSymfony/FOSRestBundle.git
     target=bundles/FOS/RestBundle
+    version=origin/0.6
 ```
 
 Now, run the vendors script to download the bundle:
@@ -39,7 +36,6 @@ If you prefer instead to use git submodules, then run the following:
 
 ``` bash
 $ git submodule add git://github.com/FriendsOfSymfony/FOSRestBundle.git vendor/bundles/FOS/RestBundle
-$ git submodule add git://github.com/FriendsOfSymfony/FOSRest.git vendor/fos/FOS/Rest
 $ git submodule update --init
 ```
 
@@ -53,8 +49,7 @@ Add the `FOS` namespace to your autoloader:
 
 $loader->registerNamespaces(array(
     // ...
-    'FOS\\Rest' => __DIR__.'/../vendor/fos',
-    'FOS'       => __DIR__.'/../vendor/bundles',
+    'FOS' => __DIR__.'/../vendor/bundles',
 ));
 ```
 

@@ -122,11 +122,11 @@ class ViewResponseListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = $this->getMockBuilder('\Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent')->disableOriginalConstructor()->getMock();
 
-        $event->expects($this->exactly(2))
+        $event->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($request));
 
-        $event->expects($this->exactly(2))
+        $event->expects($this->once())
             ->method('getControllerResult')
             ->will($this->returnValue(array()));
 
@@ -134,54 +134,5 @@ class ViewResponseListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setResponse');
 
         $listener->onKernelView($event);
-    }
-
-    /**
-     * onKernelView falls back to FrameworkExtraBundles' onKernelView
-     * when fos_rest.view_response_listener.force_view is false
-     */
-    public function testOnKernelViewFallsBackToFrameworkExtraBundle()
-    {
-        $template = $this->getMockBuilder('\Symfony\Bundle\FrameworkBundle\Templating\TemplateReference')->disableOriginalConstructor()->getMock();
-
-        $request = new Request();
-        $request->attributes->set('_template', $template);
-
-        $templating = $this->getMock('\Symfony\Bundle\FrameworkBundle\Templating\EngineInterface');
-        $templating->expects($this->once())
-            ->method('renderResponse')
-            ->with($template, array())
-            ->will($this->returnValue(new Response('output')));
-
-        $container = $this->getMockBuilder('\Symfony\Component\DependencyInjection\Container')->disableOriginalConstructor()->getMock();
-        $container->expects($this->once())
-            ->method('get')
-            ->with('templating')
-            ->will($this->returnValue($templating));
-
-        $listener = new ViewResponseListener($container);
-
-        $event = $this->getMockBuilder('\Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent')->disableOriginalConstructor()->getMock();
-
-        $event->expects($this->any())
-              ->method('getRequest')
-              ->will($this->returnValue($request));
-
-        $event->expects($this->any())
-              ->method('getControllerResult')
-              ->will($this->returnValue(array()));
-
-        $response = null;
-
-        $event->expects($this->once())
-            ->method('setResponse')
-            ->will($this->returnCallback(function ($r) use (&$response) {
-                $response = $r;
-            }));
-
-        $listener->onKernelView($event);
-
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\Response', $response);
-        $this->assertSame('output', $response->getContent());
     }
 }

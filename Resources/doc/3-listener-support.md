@@ -52,10 +52,10 @@ extends from the ``@Template()`` annotation.
 The ``@View()`` and ``@Template()`` annotations behave essentially the same
 with a minor difference. When ``view_response_listener`` is set to ``true``
 instead of the default ``force`` and ``@View()`` is not used, then rendering
-will be delegated to SensioFrameworkExtraBundle.
+will be delegated to SensioFrameworkBundle.
 
-Note that it is necessary to disable view annotations in
-SensioFrameworkExtraBundle so that FOSRestBundle can take over the handling.
+Note that it is necessary to disable view annotations in SensioFrameworkBundle
+so that FOSRestBundle can take over the handling.
 
 ```yaml
 # app/config/config.yml
@@ -100,21 +100,6 @@ public function getUsersAction()
     //...
 }
 ```
-
-The status code of the view can also be configured:
-
-```php
-<?php
-
-/**
- * @View(statusCode=204)
- */
-public function deleteUserAction()
-{
-    //...
-}
-```
-
 See the following example code for more details:
 https://github.com/liip/LiipHelloBundle/blob/master/Controller/ExtraController.php
 
@@ -141,7 +126,7 @@ fos_rest:
 ```
 
 Your custom decoder service must use a class that implements the
-``FOS\Rest\Decoder\DecoderInterface``.
+``FOS\RestBundle\Decoder\DecoderInterface``.
 
 ### Format listener
 

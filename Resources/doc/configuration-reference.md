@@ -4,54 +4,33 @@ Full default configuration
 ```yaml
 fos_rest:
     routing_loader:
-        default_format:       ~
-    service:
-        router:               router
-        templating:           templating
-        serializer:           jms_serializer.serializer
-        view_handler:         fos_rest.view_handler.default
-    objects_version:      ~
+        default_format: null
     view:
-        default_engine:       twig
+        default_engine: twig
         force_redirects:
-
-            # Prototype
-            name:                 []
-        mime_types:
-
-            # Prototype
-            name:                 []
+            html: true
         formats:
-
-            # Prototype
-            name:                 []
+            json: true
+            xml: true
         templating_formats:
-
-            # Prototype
-            name:                 []
-        view_response_listener:  force
-        failed_validation:    400
+            html: true
+        view_response_listener: 'force'
+        failed_validation: HTTP_BAD_REQUEST
     exception:
-        codes:
-
-            # Prototype
-            name:                 []
-        messages:
-
-            # Prototype
-            name:                 []
+        codes: ~
+        messages: ~
     body_listener:
         decoders:
-
-            # Prototype
-            name:                 []
+            json: fos_rest.decoder.json
+            xml: fos_rest.decoder.xml
     format_listener:
-        default_priorities:
-
-            # Defaults:
-            - html
-            - */*
-        prefer_extension:     true
-        fallback_format:      html
+        default_priorities: [html, '*/*']
+        fallback_format: html
+        prefer_extension: true
+    service:
+        router: router
+        templating: templating
+        serializer: serializer
+        view_handler: fos_rest.view_handler.default
 ```
 

@@ -9,12 +9,11 @@
  * file that was distributed with this source code.
  */
 
-$file = __DIR__.'/../vendor/.composer/autoload.php';
-if (!file_exists($file)) {
+if (file_exists($file = __DIR__.'/../vendor/.composer/autoload.php')) {
+    $autoload = require_once $file;
+} else {
     throw new RuntimeException('Install dependencies to run test suite.');
 }
-
-require_once $file;
 
 spl_autoload_register(function($class) {
     if (0 === strpos($class, 'FOS\\RestBundle\\')) {

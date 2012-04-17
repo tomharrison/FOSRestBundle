@@ -9,10 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace FOS\RestBundle;
+namespace FOS\RestBundle\Util;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpFoundation\Request;
 
-class FOSRestBundle extends Bundle
+interface FormatNegotiatorInterface
 {
+    function getBestFormat(Request $request, array $availableTypes);
 }
